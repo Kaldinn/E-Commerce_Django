@@ -1,0 +1,36 @@
+*.pyc
+*~
+__pycache__
+
+# Ignorowanie plików konfiguracyjnych
+*.env
+*.sqlite3
+
+# Ignorowanie plików z folderu Media
+/media/
+
+# Ignorowanie plików z folderu Static
+/staticfiles/
+
+# Ignorowanie plików z folderu Virtual Environment
+/env/
+
+# Ignorowanie plików z folderu Migracji Django
+**/migrations/
+
+# Ignorowanie pliku z Secret Key
+*.secret_key
+
+# Ignorowanie pliku z ustawieniami lokalnymi
+*.local_settings
+
+# Ignorowanie pliku z logami
+*.log
+
+# Ignorowanie plików wygenerowanych przez IDE lub edytor
+.vscode/
+.idea/
+
+# Ignorowanie plików wygenerowanych przez narzędzia do testowania
+.coverage
+htmlcov/
