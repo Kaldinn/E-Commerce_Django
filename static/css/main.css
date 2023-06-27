@@ -13,6 +13,12 @@ h1,h2,h3,h4,h5,h6{
 	padding: 10px;
 }
 
+.navbar-brand{
+	font-size: xx-large;
+	padding-right: 2vw;
+	padding-left: 1.5vw;
+}
+
 .thumbnail{
 	width: 100%;
 	height: 200px;
