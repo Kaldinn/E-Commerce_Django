@@ -1,14 +1,21 @@
 from django.shortcuts import render
-from .models import *
 from django.http import JsonResponse
+from django.contrib.auth.forms import UserCreationForm
+
 import json
 import datetime
-from .utils import cookie_cart, cart_data
+
+from .utils import cookie_cart, cart_data, guest_order
+from .models import *
+from .forms import CreateUserForm
 
 # Create your views here.
 def store(request):
     data = cart_data(request)
+
     cart_items = data['cart_items']
+    order = data['order']
+    items = data['items']
 
     products = Product.objects.all()
     context = {'products': products, 'cart_items': cart_items}
@@ -68,23 +75,41 @@ def process_order(request):
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        total = float(data['form']['total'])
-        order.transaction_id = transaction_id 
-
-        if total == order.get_cart_total:
-            order.complete = True
-        order.save()
-
-        if order.shipping == True:
-            ShippingAdress.objects.create(
-                customer=customer,
-                order=order,
-                adress=data['shipping']['adress'],
-                city=data['shipping']['city'],
-                state=data['shipping']['state'],
-                zipcode=data['shipping']['zipcode'] 
-            )
+        
 
     else:
-        print('User is not logged in')
+        customer, order = guest_order(request, data)
+
+    total = float(data['form']['total'])
+    order.transaction_id = transaction_id 
+
+    if total == order.get_cart_total:
+        order.complete = True
+    order.save()
+
+    if order.shipping == True:
+        ShippingAdress.objects.create(
+            customer=customer,
+            order=order,
+            adress=data['shipping']['adress'],
+            city=data['shipping']['city'],
+            state=data['shipping']['state'],
+            zipcode=data['shipping']['zipcode'] 
+        )
+
     return JsonResponse('Payment Complete', safe=False)
+
+def login_page(request):
+    context = {}
+    return render(request, 'store/login.html')
+
+def register_page(request):
+    form = CreateUserForm()
+
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+    context = {'form': form}
+    return render(request, 'store/register.html', context)
