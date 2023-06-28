@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth.forms import UserCreationForm
 
@@ -100,8 +100,15 @@ def process_order(request):
     return JsonResponse('Payment Complete', safe=False)
 
 def login_page(request):
-    context = {}
-    return render(request, 'store/login.html')
+    form = CreateUserForm()
+
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+    context = {'form': form}
+    return render(request, 'store/login.html', context)
 
 def register_page(request):
     form = CreateUserForm()
@@ -110,6 +117,7 @@ def register_page(request):
         form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
+            return redirect('login')
 
     context = {'form': form}
     return render(request, 'store/register.html', context)
