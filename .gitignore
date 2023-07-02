@@ -2,6 +2,8 @@
 *~
 __pycache__
 
+
+
 # Ignorowanie plików konfiguracyjnych
 *.env
 *.sqlite3

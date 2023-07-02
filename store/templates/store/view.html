@@ -1,0 +1,23 @@
+{% extends 'store/main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card shadow">
+        <img src="{{ product.imageURL }}" alt="{{ product.name }}" class="img-fluid">
+      </div>
+    </div>
+    <div class="col-md-8">
+      <h3>{{ product.name }}</h3>
+      <hr>
+      <p><strong>ID:</strong> {{ product.id }}</p>
+      <p><strong>Price:</strong> ${{ product.price }}</p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel reprehenderit quod in harum obcaecati velit fuga eaque nesciunt minima, rerum dolorem architecto hic eum laudantium esse fugit beatae eos soluta? Error aliquid iure nisi. Voluptates odio facilis, asperiores inventore nesciunt, nostrum quod dolorem quo sit animi nihil, ab similique accusantium temporibus ducimus. Earum nobis consequuntur voluptate non dolor maiores, consectetur accusamus in modi iure beatae officiis sit. Ex nobis natus voluptate veritatis iusto hic, eveniet eos officiis debitis eius quidem voluptates pariatur ullam vitae amet quaerat exercitationem unde assumenda tenetur quisquam voluptas nulla aliquam obcaecati? Repellat ducimus nostrum animi aperiam.
+      <hr>
+      <button data-product="{{ product.id }}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add To Cart</button>
+    </div>
+  </div>
+</div>
+{% endblock content %}

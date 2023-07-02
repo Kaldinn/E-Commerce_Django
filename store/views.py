@@ -1,6 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 
 import json
 import datetime
@@ -8,6 +10,17 @@ import datetime
 from .utils import cookie_cart, cart_data, guest_order
 from .models import *
 from .forms import CreateUserForm
+
+def view_product(request, pk):
+    data = cart_data(request)
+    cart_items = data['cart_items']
+    order = data['order']
+    items = data['items']
+        
+    product = get_object_or_404(Product, id=pk)
+    context = {'product':product, 'items':items, 'order': order, 'cart_items': cart_items}
+    return render(request, 'store/view.html', context)
+
 
 # Create your views here.
 def store(request):
@@ -99,25 +112,54 @@ def process_order(request):
 
     return JsonResponse('Payment Complete', safe=False)
 
-def login_page(request):
-    form = CreateUserForm()
 
-    if request.method == 'POST':
-        form = CreateUserForm(request.POST)
-        if form.is_valid():
-            form.save()
 
-    context = {'form': form}
-    return render(request, 'store/login.html', context)
+# def login_page(request):
+#     data = cart_data(request)
+#     cart_items = data['cart_items']
+#     order = data['order']
+#     items = data['items']
 
-def register_page(request):
-    form = CreateUserForm()
+#     form = CreateUserForm()
 
-    if request.method == 'POST':
-        form = CreateUserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('login')
+#     if request.method == 'POST':
+#         username = request.POST.get('username')
+#         password = request.POST.get('password')
+        
+#         user = authenticate(request, username=username, password=password)
 
-    context = {'form': form}
-    return render(request, 'store/register.html', context)
+#         if user is not None:
+#             login(request, user)
+#             print("good")
+#             return redirect('store')
+
+
+#     context = {'form': form, 'items':items, 'order': order, 'cart_items': cart_items}
+#     return render(request, 'store/login.html', context)
+
+# def logout_user(request):
+#     logout(request)
+#     return redirect('login')
+
+
+# def register_page(request):
+#     data = cart_data(request)
+#     cart_items = data['cart_items']
+#     order = data['order']
+#     items = data['items']
+
+#     form = CreateUserForm()
+
+#     if request.method == 'POST':
+#         form = CreateUserForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             user = form.cleaned_data.get('username')
+#             user = User.objects.get(username=user)
+#             customer = Customer.objects.create(user=user, email=form.cleaned_data['email'])
+
+#             messages.success(request, f"Account was created for {user}")
+#             return redirect('login')
+
+#     context = {'form': form, 'items':items, 'order': order, 'cart_items': cart_items}
+#     return render(request, 'store/register.html', context)

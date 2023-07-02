@@ -1,4 +1,4 @@
-{% extends 'store/main.html' %}
+<!-- {% extends 'store/main.html' %}
 {% load static %}
 
 {% block content %}
@@ -39,6 +39,11 @@
                                     <button type="submit" class="btn btn-primary btn-block">Register</button>
                                 </div>
                             </div>
+                            {% if form.errors %}
+                                <div class="alert alert-danger">
+                                    {{ form.errors }}
+                                </div>
+                            {% endif %}
                         </form>
                         <p class="text-center">Already have an account? <a href="{% url 'login' %}">Login</a></p>
                     </div>
@@ -46,4 +51,4 @@
             </div>
         </div>
     </div>
-{% endblock %}
+{% endblock %} -->
